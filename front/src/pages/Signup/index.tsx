@@ -13,7 +13,7 @@ import {
     MDBInput,
 }
     from 'mdb-react-ui-kit';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { InputUser } from '../../lib/types';
 import { handleSignup } from '../../lib/api';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -38,6 +38,7 @@ const validate = yup.object().shape({
 });
 
 export function Signup() {
+    const navigate=useNavigate()
     
     const [user,setUser]=useState<InputUser>({name:"",surname:"",login:"",password:""})
     const[error,setError]=useState<string>("")
@@ -48,12 +49,15 @@ export function Signup() {
 
     const onSubmit: SubmitHandler<InputUser> = (data) => {
         setUser(data);
-
+        
         handleSignup(data)
             .then(response => {
                 if (response.status === "error" && response.message) {
                     setError(response.message);
+                }else{
+                    navigate('/profile');
                 }
+                setError("")    
             });
     };
 
@@ -72,7 +76,7 @@ export function Signup() {
                             <h3 className="mb-4 pb-2 pb-md-0 mb-md-5 px-md-2">Registration Info</h3>
                             <p>Already have an account? <Link to={'/login'}>Login Now</Link></p>
 
-                            <form onSubmit={handleSubmit(onSubmit)}>
+                            <form onSubmit={handleSubmit(onSubmit)} >
                                 {error&& <p className='text-danger'>{error}</p>}
                                 <MDBInput
                                     wrapperClass='mb-4'

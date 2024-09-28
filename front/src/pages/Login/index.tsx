@@ -27,7 +27,6 @@ export function Login() {
             setError(response.message||"");
         } else {
             console.log(user);
-            
             navigate('/profile');
         }
     };
